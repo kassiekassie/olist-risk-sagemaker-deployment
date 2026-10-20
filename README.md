@@ -60,7 +60,7 @@ olist-risk-sagemaker-deployment/
 ## 1. Prepare the local environment
 
 ```bash
-cd /Users/itskassi3/Desktop/member4_handoff
+cd olist-risk-sagemaker-deployment
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
@@ -157,7 +157,7 @@ python deployment/endpoint_status.py
 Run these commands 30–60 minutes before the presentation:
 
 ```bash
-cd /Users/itskassi3/Desktop/member4_handoff
+cd olist-risk-sagemaker-deployment
 source .venv/bin/activate
 python deployment/deploy_endpoint.py
 python deployment/endpoint_status.py
@@ -176,6 +176,18 @@ python deployment/cleanup_endpoint.py
 ```
 
 Keep the existing successful invocation screenshot and a rehearsal recording as backup, but use a live cloud invocation when AWS is available.
+
+## Optional customer-care dashboard
+
+The local Flask dashboard turns the live model response into a proposed customer-care routing decision. It does not use RDS, persist cases, contact customers or create a real queue.
+
+Start it only after the endpoint is `InService`:
+
+```bash
+python web_demo/app.py
+```
+
+Open `http://127.0.0.1:5055`, load the verified sample and choose **Run live inference**. The browser sends JSON to the local Flask server; AWS credentials remain on the server side and are never exposed in the HTML.
 
 ## GitHub safety check
 

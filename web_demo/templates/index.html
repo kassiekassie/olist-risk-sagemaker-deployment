@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="PAL customer-care routing dashboard backed by SageMaker real-time inference." />
+    <title>Olist Risk Routing Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Olist risk routing console home">
+        <span class="brand-mark">O</span>
+        <span><strong>Olist CX</strong><small>Risk Routing Console</small></span>
+      </a>
+      <div class="endpoint-state" aria-live="polite">
+        <span class="status-dot" id="status-dot"></span>
+        <span><small>SageMaker endpoint</small><strong id="endpoint-status">Checking…</strong></span>
+        <button class="icon-button" id="refresh-status" type="button" title="Refresh endpoint status">↻</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">DELIVERY CONFIRMED · REAL-TIME DECISION SUPPORT</p>
+          <h1>Turn delivery signals into an actionable service decision.</h1>
+        </div>
+        <p class="intro-copy">Submit one delivered-order JSON request. The live SageMaker model scores review risk, then this dashboard translates the result into a proposed customer-care route.</p>
+      </section>
+
+      <section class="workspace">
+        <article class="panel request-panel">
+          <div class="panel-heading">
+            <div><span class="step-label">01 · REQUEST</span><h2>Delivered order payload</h2></div>
+            <span class="feature-badge">{{ feature_count }} features</span>
+          </div>
+          <label class="sr-only" for="json-input">JSON request</label>
+          <textarea id="json-input" spellcheck="false" aria-describedby="request-help"></textarea>
+          <p class="field-help" id="request-help">Uses delivery-time structured data only. Review text and review score are excluded.</p>
+          <div class="request-actions">
+            <button class="button secondary" id="load-sample" type="button">Load verified sample</button>
+            <button class="button secondary" id="format-json" type="button">Format JSON</button>
+            <button class="button primary" id="run-inference" type="button"><span>Run live inference</span><span aria-hidden="true">→</span></button>
+          </div>
+          <div class="message" id="request-message" role="alert" hidden></div>
+        </article>
+
+        <article class="panel decision-panel" id="decision-panel">
+          <div class="panel-heading">
+            <div><span class="step-label">02 · MODEL DECISION</span><h2>Risk assessment</h2></div>
+            <span class="risk-chip waiting" id="risk-chip">AWAITING RESULT</span>
+          </div>
+          <div class="empty-state" id="empty-state">
+            <div class="pulse-ring"><span></span></div>
+            <h3>Ready for a live request</h3>
+            <p>Load the verified sample, confirm that the endpoint is InService, then run inference.</p>
+          </div>
+          <div class="results" id="results" hidden>
+            <div class="score-row">
+              <div><span class="metric-label">RISK SCORE</span><strong class="hero-score" id="risk-score">—</strong></div>
+              <div class="threshold-copy"><span>Operating threshold</span><strong id="risk-threshold">—</strong></div>
+            </div>
+            <div class="score-track" aria-label="Risk score compared with decision threshold">
+              <div class="score-fill" id="score-fill"></div>
+              <div class="threshold-marker" id="threshold-marker"><span>Threshold</span></div>
+            </div>
+            <p class="score-note">Ranking score on a 0–1 scale; it is not a calibrated probability.</p>
+            <div class="metric-grid">
+              <div class="metric-card"><span>Predicted class</span><strong id="predicted-class">—</strong></div>
+              <div class="metric-card"><span>Priority review</span><strong id="priority-flag">—</strong></div>
+              <div class="metric-card"><span>Model version</span><strong id="model-version">—</strong></div>
+              <div class="metric-card"><span>Live latency</span><strong id="latency">—</strong></div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="business-panel" id="business-panel" aria-live="polite">
+        <div class="business-heading">
+          <div>
+            <span class="step-label">03 · BUSINESS ROUTING</span>
+            <h2 id="business-headline">Prediction-to-action workflow</h2>
+            <p id="business-summary">Once a result is returned, the dashboard proposes an appropriate customer-care route.</p>
+          </div>
+          <div class="queue-card">
+            <span>Recommended queue</span><strong id="queue-name">Pending model decision</strong>
+            <small>Recommendation only · no automatic case creation</small>
+          </div>
+        </div>
+        <div class="action-grid" id="action-grid">
+          <article class="action-card muted"><span>01</span><h3>Score the order</h3><p>SageMaker evaluates the verified delivery-time feature set.</p></article>
+          <article class="action-card muted"><span>02</span><h3>Apply the threshold</h3><p>The score is compared with the selected operating threshold.</p></article>
+          <article class="action-card muted"><span>03</span><h3>Recommend a route</h3><p>High-risk orders are proposed for priority human review.</p></article>
+        </div>
+      </section>
+
+      <section class="evidence-strip">
+        <div><span>ORDER</span><strong id="summary-order">—</strong></div>
+        <div><span>DELIVERY DELAY</span><strong id="summary-delay">—</strong></div>
+        <div><span>CATEGORY</span><strong id="summary-category">—</strong></div>
+        <div><span>ROUTE</span><strong id="summary-route">—</strong></div>
+        <div><span>ORDER VALUE</span><strong id="summary-value">—</strong></div>
+      </section>
+    </main>
+
+    <footer>
+      <p><strong>{{ endpoint_name }}</strong> · {{ region }} · Amazon SageMaker real-time inference</p>
+      <p>No RDS, OLAP, automated outreach or persistent queue is used in this demonstration.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>

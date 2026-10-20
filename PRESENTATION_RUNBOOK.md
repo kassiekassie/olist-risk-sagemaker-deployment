@@ -26,6 +26,14 @@ Show the endpoint page in the AWS Console, then run:
 python deployment/invoke_endpoint.py
 ```
 
+Optional business-facing demonstration:
+
+```bash
+python web_demo/app.py
+```
+
+Open `http://127.0.0.1:5055`, load the verified request and run live inference. Explain that the displayed customer-care queue is a routing recommendation, not a persisted RDS queue or an automatic customer action.
+
 Explain:
 
 > This project uses online real-time inference. After delivery confirmation, 47 structured order features are sent to the SageMaker endpoint. The endpoint returns a risk score, operating threshold, binary decision, priority-review flag and model version. Review text and review scores are not used as live inputs.
