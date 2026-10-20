@@ -1,0 +1,12 @@
+{
+  "predictions": [
+    {
+      "order_id": "ae3818a9067c10088e84a13bceaa9b68",
+      "risk_score": 0.9756467938423157,
+      "risk_threshold": 0.5906863212585449,
+      "predicted_class": 1,
+      "priority_review_flag": true,
+      "model_version": "v1.0-project-demo"
+    }
+  ]
+}

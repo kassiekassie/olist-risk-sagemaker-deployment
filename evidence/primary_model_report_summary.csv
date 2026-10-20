@@ -1,0 +1,13 @@
+section,item,value,note
+Purpose,Target,Predict bad-review risk after confirmed delivery,Target comes from review-text label pipeline
+Data,Primary sample,"39,982 labelled orders",13 delivery-sequence anomalies excluded
+Features,Inputs,47 structured fields,43 numeric and 4 categorical; no review fields
+Model,Selected algorithm,XGBoost with class weighting,Selected by 5-fold stratified CV ROC-AUC
+Operations,Capacity assumption,20% of delivered orders,Transparent project assumption
+Operations,Risk threshold,0.591,Selected on validation data only
+Test,ROC-AUC,0.749,Untouched Primary test set
+Test,PR-AUC,0.653,Untouched Primary test set
+Test,Precision,0.706,At selected capacity threshold
+Test,Recall,0.463,At selected capacity threshold
+Sensitivity,Strict ROC-AUC,0.746,High/Medium-confidence labels only
+Limitation,Representativeness,Mild selection differences,Written-review customers are not identical to all delivered orders
