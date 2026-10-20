@@ -56,8 +56,10 @@
           </div>
           <div class="empty-state" id="empty-state">
             <div class="pulse-ring"><span></span></div>
-            <h3>Ready for a live request</h3>
-            <p>Load the verified sample, confirm that the endpoint is InService, then run inference.</p>
+            <div class="empty-copy">
+              <h3 id="empty-title">Checking the live endpoint</h3>
+              <p id="empty-description">The dashboard is confirming whether SageMaker is ready to receive a request.</p>
+            </div>
           </div>
           <div class="results" id="results" hidden>
             <div class="score-row">

@@ -15,6 +15,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
@@ -61,7 +62,7 @@ main { width: min(1480px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 48
 .workspace { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(430px, 0.92fr); gap: 20px; }
 .panel, .business-panel { border: 1px solid rgba(17, 26, 43, 0.1); border-radius: 26px; background: var(--paper); box-shadow: var(--shadow); }
 .panel { min-height: 600px; padding: clamp(22px, 3vw, 36px); }
-.decision-panel { overflow: hidden; background: linear-gradient(145deg, rgba(255, 159, 10, 0.08), transparent 35%), var(--navy); color: #fff; }
+.decision-panel { align-self: start; min-height: 0; overflow: hidden; background: linear-gradient(145deg, rgba(255, 159, 10, 0.08), transparent 35%), var(--navy); color: #fff; }
 .decision-panel .step-label { color: #ffc45e; }
 .panel-heading { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; margin-bottom: 22px; }
 .panel-heading h2, .business-heading h2 { margin: 6px 0 0; font-size: clamp(24px, 2.5vw, 34px); letter-spacing: -0.035em; }
@@ -70,6 +71,7 @@ main { width: min(1480px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 48
 .risk-chip { background: rgba(255, 255, 255, 0.1); color: #dbe4f3; }
 .risk-chip.high { background: var(--orange); color: var(--navy); }
 .risk-chip.standard { background: var(--green); color: #fff; }
+.risk-chip.error { background: #fee2e2; color: #991b1b; }
 
 #json-input { display: block; width: 100%; height: 405px; resize: vertical; border: 1px solid #26334a; border-radius: 18px; outline: none; background: var(--navy); color: #f8fafc; padding: 20px; font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.65; tab-size: 2; }
 #json-input:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255, 159, 10, 0.14); }
@@ -82,11 +84,11 @@ main { width: min(1480px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 48
 .button:disabled { cursor: wait; opacity: 0.62; }
 .message { margin-top: 14px; padding: 13px 15px; border-radius: 12px; background: #fee2e2; color: #991b1b; font-size: 13px; line-height: 1.55; }
 
-.empty-state { display: grid; min-height: 440px; place-items: center; align-content: center; text-align: center; }
-.empty-state h3 { margin: 24px 0 7px; font-size: 23px; }
-.empty-state p { max-width: 390px; margin: 0; color: #9eabc0; line-height: 1.65; }
-.pulse-ring { display: grid; width: 96px; height: 96px; place-items: center; border: 1px solid rgba(255, 159, 10, 0.3); border-radius: 999px; box-shadow: 0 0 0 18px rgba(255, 159, 10, 0.06), 0 0 0 36px rgba(255, 159, 10, 0.03); }
-.pulse-ring span { width: 20px; height: 20px; border-radius: 999px; background: var(--orange); }
+.empty-state { display: grid; grid-template-columns: auto 1fr; min-height: 210px; gap: 30px; align-items: center; padding: 18px 14px 30px; text-align: left; }
+.empty-state h3 { margin: 0 0 7px; font-size: 23px; }
+.empty-state p { max-width: 430px; margin: 0; color: #9eabc0; line-height: 1.65; }
+.pulse-ring { display: grid; width: 70px; height: 70px; place-items: center; border: 1px solid rgba(255, 159, 10, 0.34); border-radius: 999px; box-shadow: 0 0 0 11px rgba(255, 159, 10, 0.06), 0 0 0 22px rgba(255, 159, 10, 0.03); }
+.pulse-ring span { width: 15px; height: 15px; border-radius: 999px; background: var(--orange); }
 .results { padding-top: 16px; }
 .score-row { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
 .hero-score { display: block; margin-top: 3px; font-size: clamp(56px, 7vw, 92px); letter-spacing: -0.07em; line-height: 1; }
@@ -144,6 +146,7 @@ footer { display: flex; justify-content: space-between; gap: 30px; width: min(14
   .intro h1 { font-size: 42px; }
   .panel, .business-panel { border-radius: 20px; }
   .panel-heading, .score-row { align-items: flex-start; flex-direction: column; }
+  .empty-state { grid-template-columns: 1fr; gap: 28px; min-height: 270px; justify-items: center; text-align: center; }
   #json-input { height: 340px; }
   .metric-grid, .action-grid, .evidence-strip { grid-template-columns: 1fr; }
   .evidence-strip > div { border-right: 0; }

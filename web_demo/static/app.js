@@ -8,6 +8,8 @@ const elements = {
   statusDot: document.querySelector("#status-dot"),
   message: document.querySelector("#request-message"),
   empty: document.querySelector("#empty-state"),
+  emptyTitle: document.querySelector("#empty-title"),
+  emptyDescription: document.querySelector("#empty-description"),
   results: document.querySelector("#results"),
   chip: document.querySelector("#risk-chip"),
   score: document.querySelector("#risk-score"),
@@ -40,6 +42,15 @@ function clearError() {
   elements.message.textContent = "";
 }
 
+function showDecisionState(chip, title, description, kind = "waiting") {
+  if (!elements.results.hidden) return;
+  elements.empty.hidden = false;
+  elements.chip.textContent = chip;
+  elements.chip.className = `risk-chip ${kind}`;
+  elements.emptyTitle.textContent = title;
+  elements.emptyDescription.textContent = description;
+}
+
 async function loadSample() {
   clearError();
   try {
@@ -70,10 +81,16 @@ async function refreshEndpointStatus() {
     elements.endpointStatus.textContent = data.status;
     elements.statusDot.classList.add(data.status === "InService" ? "online" : "offline");
     elements.endpointStatus.title = data.detail || `${data.endpoint_name} · ${data.region}`;
+    if (data.status === "InService") {
+      showDecisionState("READY", "Ready for a live request", "The endpoint is InService. Run inference to replace this card with the model result.");
+    } else {
+      showDecisionState("ENDPOINT OFFLINE", "No live result yet", "Deploy the SageMaker endpoint and wait for InService before running inference.", "error");
+    }
   } catch (error) {
     elements.endpointStatus.textContent = "Unavailable";
     elements.endpointStatus.title = error.message;
     elements.statusDot.classList.add("offline");
+    showDecisionState("STATUS UNAVAILABLE", "Endpoint status unavailable", "Check the local AWS session, then refresh the endpoint status.", "error");
   }
 }
 
@@ -140,6 +157,9 @@ async function runInference() {
   const original = elements.run.innerHTML;
   elements.run.disabled = true;
   elements.run.textContent = "Invoking SageMaker…";
+  elements.results.hidden = true;
+  elements.empty.hidden = false;
+  showDecisionState("INVOKING", "Request sent to SageMaker", "Waiting for the real-time endpoint to return one prediction.");
   try {
     const response = await fetch("/api/predict", {
       method: "POST",
@@ -151,6 +171,7 @@ async function runInference() {
     renderResult(data);
   } catch (error) {
     showError("Live inference failed", error.message);
+    showDecisionState("NO LIVE RESULT", "The request did not return a prediction", "Read the error beside the request, correct the endpoint or payload, then try again.", "error");
   } finally {
     elements.run.disabled = false;
     elements.run.innerHTML = original;
