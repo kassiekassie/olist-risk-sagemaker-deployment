@@ -32,7 +32,7 @@ Optional business-facing demonstration:
 python web_demo/app.py
 ```
 
-Open `http://127.0.0.1:5055`, load the verified request and run live inference. Explain that the displayed customer-care queue is a routing recommendation, not a persisted RDS queue or an automatic customer action.
+Open `http://127.0.0.1:5056`, load the verified request and run live inference. Explain that the displayed customer-care queue is a routing recommendation, not a persisted RDS queue or an automatic customer action.
 
 Explain:
 

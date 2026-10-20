@@ -299,5 +299,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PAL_DASHBOARD_PORT", "5055"))
+    port = int(os.getenv("PAL_DASHBOARD_PORT", "5056"))
     app.run(host="127.0.0.1", port=port, debug=False)

@@ -187,7 +187,7 @@ Start it only after the endpoint is `InService`:
 python web_demo/app.py
 ```
 
-Open `http://127.0.0.1:5055`, load the verified sample and choose **Run live inference**. The browser sends JSON to the local Flask server; AWS credentials remain on the server side and are never exposed in the HTML.
+Open `http://127.0.0.1:5056`, load the verified sample and choose **Run live inference**. The browser sends JSON to the local Flask server; AWS credentials remain on the server side and are never exposed in the HTML.
 
 ## GitHub safety check
 
