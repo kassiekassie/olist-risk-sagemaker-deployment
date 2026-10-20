@@ -30,7 +30,7 @@ The selected inference mode is **online / real-time inference** because a newly 
 ## Repository structure
 
 ```text
-member4_handoff/
+olist-risk-sagemaker-deployment/
 ├── deployment/
 │   ├── settings.py
 │   ├── inference.py

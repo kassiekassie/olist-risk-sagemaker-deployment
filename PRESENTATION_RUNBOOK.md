@@ -10,7 +10,7 @@
 ## 30–60 minutes before the presentation
 
 ```bash
-cd /Users/itskassi3/Desktop/member4_handoff
+cd olist-risk-sagemaker-deployment
 source .venv/bin/activate
 python deployment/deploy_endpoint.py
 python deployment/endpoint_status.py
